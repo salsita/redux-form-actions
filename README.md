@@ -1,15 +1,15 @@
 # redux-form-actions
 
-Redux Form provides way how to make asynchronous submit, but it's uses promises.
-In Redux application, using actions is more natural. Especially when you are
-using asynchronous task abstraction like sagas or observables.
+Redux Form provides way to make asynchronous submit validation,
+but API can use only promises. For Redux applications, using actions is more natural.
+Especially when you are using asynchronous flow abstraction like sagas or observables.
 
-Redux Form Actions is wrapper around Redux Form with action driven submits.
+Redux Form Actions is wrapper around Redux Form with action driven submit validations.
 
 ## Installation
 
 ```
-npm install --save redux-form-action
+npm install --save redux-form-actions
 ```
 
 ## Usage Guide
@@ -29,29 +29,16 @@ export const submitContactForm = (form, values) => ({
 });
 
 export const submitContactOk = () => ({
-  type: SUBMIT_CONTACT_OK,
+  type: SUBMIT_CONTACT_OK
 });
 
 export const submitContactFailed = (err) => ({
-  type: Action.SUBMIT_CONTACT_FAILED
+  type: Action.SUBMIT_CONTACT_FAILED,
   payload: err
 });
 ```
 
-### #2 Register middleware
-
-```javascript
-import { reduxFormMiddleware } from 'redux-form-actions';
-
-const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    reduxFormMiddleware
-  )
-);
-```
-
-### #3 Create Form
+### #2 Create Form
 
 Create form component same as with Redux Form,
 https://redux-form.com/6.1.1/docs/GettingStarted.md/#step-2
@@ -92,6 +79,21 @@ class ContactPage extends React.Component {
     );
   }
 }
+```
+
+### #4 Register middleware
+
+Middleware is essential to handle declared `succeededAction` and `failedActions`.
+
+```javascript
+import { reduxFormMiddleware } from 'redux-form-actions';
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    reduxFormMiddleware
+  )
+);
 ```
 
 ### #4 Put all action together
