@@ -143,13 +143,16 @@ API is same as [redux-form](http://redux-form.com/6.1.1/docs/api/) except follow
 
 <code><b>onSubmit</b></code>:
 If `succeededAction` is also declared onSubmit is considered asynchronous and resolved with future action.
-Otherwise behave same as reduxForm action.
+Otherwise behave same as plain reduxForm callback.
 
 <code><b>succeededAction</b></code>: string | (action) => boolean<br>
 Action type or predicate. Matching action resolves submit as succeeded.
 
 <code><b>failedAction</b></code>: string | (action) => boolean<br>
 Action type or predicate. Matching action resolves submit as failed.
+
+Like plain Redux Form, you can use options as `reduxForm()` argument or declare
+them as component props.
 
 ## Immutable JS
 
