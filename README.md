@@ -23,9 +23,9 @@ export const SUBMIT_CONTACT_FORM = 'SUBMIT_CONTACT_FORM';
 export const SUBMIT_CONTACT_OK = 'SUBMIT_CONTACT_OK';
 export const SUBMIT_CONTACT_FAILED = 'SUBMIT_CONTACT_FAILED';
 
-export const submitContactForm = (form, values) => ({
+export const submitContactForm = (values) => ({
   type: SUBMIT_CONTACT_FORM,
-  payload: { form, values }
+  payload: value
 });
 
 export const submitContactOk = () => ({
@@ -40,7 +40,7 @@ export const submitContactFailed = (err) => ({
 
 ### #2 Create Form
 
-Create form component same as with Redux Form,
+Create form component same as with Redux Form,<br>
 see https://redux-form.com/6.1.1/docs/GettingStarted.md/#step-2
 
 For convenience `redux-form-actions` re-export all stuff from `redux-form` so
