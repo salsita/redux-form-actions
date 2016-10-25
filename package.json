@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "files": [
     "lib",
-    "src"
+    "src",
+    "immutable.js"
   ],
   "jsnext:main": "src/index.js",
   "scripts": {
