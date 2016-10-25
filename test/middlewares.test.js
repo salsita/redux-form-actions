@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies: 0 */
 import { assert } from 'chai';
 import sinon from 'sinon';
 

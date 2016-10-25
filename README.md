@@ -33,7 +33,7 @@ export const submitContactOk = () => ({
 });
 
 export const submitContactFailed = (err) => ({
-  type: Action.SUBMIT_CONTACT_FAILED,
+  type: SUBMIT_CONTACT_FAILED,
   payload: err
 });
 ```
@@ -41,7 +41,7 @@ export const submitContactFailed = (err) => ({
 ### #2 Create Form
 
 Create form component same as with Redux Form,
-https://redux-form.com/6.1.1/docs/GettingStarted.md/#step-2
+see https://redux-form.com/6.1.1/docs/GettingStarted.md/#step-2
 
 For convenience `redux-form-actions` re-export all stuff from `redux-form` so
 you can import fields also from `redux-form-actions` module.
@@ -60,25 +60,33 @@ export default reduxForm({
 
 ### #3 Render Form
 
-Put form to your container. Unlike plain Redux Form `onSubmit` now
-expecting action creator. This action is dispatched on submit.
-And submit is resolved when action with matching
+Put form to your container. Same as with plain Redux Form `onSubmit` is
+called when user submits form, but instead of returning promise we just
+dispatch action. In this example action creator is wrapped with dispatch by
+standard react-redux [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options).
+
+Form submit is resolved when action matching
 `succeededAction` or `failedAction` type is dispatched.
 
 ```javascript
-import * as Action from '../actions';
+import * as Actions, { submitContactForm } from '../actions';
 
 class ContactPage extends React.Component {  
   render() {
     return (
       <ContactForm
         onSubmit={this.props.submitContactForm}
-        succeededAction={Action.SUBMIT_CONTACT_OK}
-        failedAction={Action.SUBMIT_CONTACT_FAILED}
+        succeededAction={Actions.SUBMIT_CONTACT_OK}
+        failedAction={Actions.SUBMIT_CONTACT_FAILED}
       />
     );
   }
 }
+
+export default connect(
+  state => ({}), { submitContactForm }
+)(ContactPage);
+
 ```
 
 ### #4 Register middleware
@@ -98,7 +106,7 @@ const store = createStore(
 
 ### #4 Put all action together
 
-Finally put all together, using thunk, saga or observable
+Finally put all together. Use you favorite approach - thunk, saga or observable.
 
 [redux-observable](https://redux-observable.js.org/) epic:
 ```javascript
@@ -109,7 +117,7 @@ export default action$ => {
     const { form, values } = action.payload;
     return ajax.post(`/submits/${form}`, values)
         .map(submitContactOk)
-        .catch(submitContactFailed)    
+        .catch(submitContactFailed);
   });
 };
 ```
@@ -122,17 +130,31 @@ function* constactFormSaga() {
     const { form, values } = action.payload;
     try {
       yield call(FormApi.submit, `/submits/${form}`, values);
-      yield put(submitContactOk())
+      yield put(submitContactOk());
     } catch (err) {
-      yield put(submitContactFailed(err))
+      yield put(submitContactFailed(err));
     }
 }
 ```
+
+## API Summary
+
+API is same as [redux-form](http://redux-form.com/6.1.1/docs/api/) except following `reduxForm()` changes:
+
+<code><b>onSubmit</b></code>:
+If `succeededAction` is also declared onSubmit is considered asynchronous and resolved with future action.
+Otherwise behave same as reduxForm action.
+
+<code><b>succeededAction</b></code>: string | (action) => boolean<br>
+Action type or predicate. Matching action resolves submit as succeeded.
+
+<code><b>failedAction</b></code>: string | (action) => boolean<br>
+Action type or predicate. Matching action resolves submit as failed.
 
 ## Immutable JS
 
 `redux-form-actions` provide Immutable.JS variant in same way as original `redux-form`.
 
 ```javascript
-import { reduxForm } from 'redux-form-actions/immutable'
+import { reduxForm } from 'redux-form-actions/immutable';
 ```
