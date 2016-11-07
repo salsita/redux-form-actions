@@ -46,7 +46,7 @@ see https://redux-form.com/6.1.1/docs/GettingStarted.md/#step-2
 For convenience `redux-form-actions` re-export all stuff from `redux-form` so
 you can import fields also from `redux-form-actions` module.
 
-Decorate the form component using reduxFrom from `redux-form-actions`.
+Decorate the form component using reduxForm from `redux-form-actions`.
 
 ```javascript
 import { Field, reduxForm } from 'redux-form-actions';
@@ -92,9 +92,15 @@ export default connect(
 ### #4 Register middleware
 
 Middleware is essential to handle declared `succeededAction` and `failedActions`.
+Use middleware in addition to original form reducer.
 
 ```javascript
-import { reduxFormMiddleware } from 'redux-form-actions';
+import { reduxFormMiddleware, reducer as formReducer } from 'redux-form-actions';
+
+const reducers = {
+  // ... your other reducers here ...
+  form: formReducer // <---- Mounted at 'form'
+}
 
 const store = createStore(
   rootReducer,
